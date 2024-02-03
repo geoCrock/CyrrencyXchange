@@ -29,6 +29,7 @@ async def fetch_prices():
             except Exception as e:
                 print(f"Произошла ошибка при получении данных: {e}")
 
+
 async def main():
     await fetch_prices()
 

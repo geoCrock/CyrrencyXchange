@@ -1,28 +1,27 @@
-import aiohttp
-
 import uvicorn
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 
-app = FastAPI()
-
-
-async def update_exchange_rates(symbol):
-    async with aiohttp.ClientSession() as session:
-        try:
-            async with session.get(f'https://api.binance.com/api/v3/ticker/price?symbol={symbol}') as response:
-                data = await response.json()
-                if 'price' in data:
-                    return float(data['price'])
-                else:
-                    return f"Error: No 'price' key in response for symbol: {symbol} or symbol in not exist"
-        except Exception as e:
-            return f"Error: fetching data for symbol {symbol}: {e}"
+from cctx import get_all_cyrrency
+from cctx import r
+from get_rub import usd_to_rub
 
 
-@app.get("/courses/{symbol}")
-async def get_exchange_rate(symbol: str):
-    value = await update_exchange_rates(symbol)
-    return {"exchanger": "binance", "courses": [{"direction": symbol, "value": value}]}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await usd_to_rub()
+    await get_all_cyrrency()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/v1/courses/{currency}")
+async def get_exchange_rate(currency: str):
+    currency = currency.replace('-', '/')
+    return r.get(currency).decode('utf-8')
+    # value = await update_exchange_rates(symbol)
+    # return {"exchanger": "binance", "courses": [{"direction": symbol, "value": value}]}
 
 
 @app.get('/test')
