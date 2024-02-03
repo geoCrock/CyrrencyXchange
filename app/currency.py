@@ -14,7 +14,7 @@ async def fetch_ticker(exchange, pair):
             r.set(pair, ask_price)
             value = r.get(pair).decode('utf-8')
             print(f'Установилось значение для редис на {pair}: {value}')
-            return ask_price
+            return pair
     except ccxt.NetworkError as e:
         print(f"Ошибка сети при обращении к {exchange.id}: {e}")
     except ccxt.ExchangeError as e:
@@ -38,26 +38,19 @@ async def get_all_cyrrency():
     tasks = []
     for pair in currency_pairs:
         for exchange in exchanges:
-            tasks.append(fetch_ticker(exchange, pair))
+            if not pair in tasks:
+                tasks.append(fetch_ticker(exchange, pair))
 
     # Запускаем все задачи и ждем их завершения
     results = await asyncio.gather(*tasks)
 
     # Заполняем словарь найденными курсами
-    for pair, rate in zip(currency_pairs, results):
-        if rate is not None:
-            currency_rates[pair] = rate
+    # for pair, rate in zip(currency_pairs, results):
+    #     if rate is not None:
+    #         currency_rates[pair] = rate
 
     # Закрываем ресурсы для каждой биржи
     for exchange in exchanges:
         await exchange.close()
 
     return currency_rates
-
-# Запускаем асинхронный код
-# currency_rates = asyncio.run(get_all_cyrrency())
-
-# Выводим найденные курсы
-# print("Найденные курсы:")
-# for pair, rate in currency_rates.items():
-#     print(f"{pair}: {rate}")

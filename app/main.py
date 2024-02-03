@@ -2,8 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from cctx import get_all_cyrrency
-from cctx import r
+from currency import get_all_cyrrency
+from currency import r
 from get_rub import usd_to_rub
 
 
@@ -19,9 +19,10 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/v1/courses/{currency}")
 async def get_exchange_rate(currency: str):
     currency = currency.replace('-', '/')
-    return r.get(currency).decode('utf-8')
-    # value = await update_exchange_rates(symbol)
-    # return {"exchanger": "binance", "courses": [{"direction": symbol, "value": value}]}
+    try:
+        return r.get(currency).decode('utf-8')
+    except Exception:
+        return 'Нет данных на эту пару валют'
 
 
 @app.get('/test')
