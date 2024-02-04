@@ -1,5 +1,6 @@
 import aiohttp
 from app.currency import r
+from log import logger
 
 
 async def usd_to_rub():
@@ -8,4 +9,4 @@ async def usd_to_rub():
         async with session.get(url) as response:
             data = await response.json()
             r.set('rub', str(data['rates']['RUB']))
-            print(f"Получили курс рубля к доллару {str(data['rates']['RUB'])}")
+            logger.info(f"Получили курс рубля к доллару {str(data['rates']['RUB'])}")

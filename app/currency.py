@@ -2,6 +2,8 @@ import ccxt.async_support as ccxt
 import asyncio
 import redis
 
+from log import logger
+
 r = redis.Redis(host='localhost', port=6379, db=0)
 
 
@@ -9,21 +11,20 @@ async def fetch_ticker(exchange, pair):
     try:
         ticker = await exchange.fetch_ticker(pair)
         ask_price = ticker['ask']
-        print(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
+        logger.info(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
         if not ask_price == 'None':
             info_list = [exchange.id, ask_price]
             r.delete(pair)
             r.rpush(pair, *info_list)
             list_values = r.lrange(pair, 0, -1)
-            print(f'Лист который попал в redis: {list_values}')
-            print(f'Установилось значение для redis на {pair}: {ask_price}')
+            logger.info(f'Установилось значение для redis на {pair}: {list_values}')
             return pair
     except ccxt.NetworkError as e:
-        print(f"Ошибка сети при обращении к {exchange.id}: {e}")
+        logger.warning(f"Ошибка сети при обращении к {exchange.id}: {e}")
     except ccxt.ExchangeError as e:
-        print(f"Ошибка биржи {exchange.id}: {e}")
+        logger.warning(f"Ошибка биржи {exchange.id}: {e}")
     except Exception as e:
-        print(f"Необработанная ошибка при обращении к {exchange.id}: {e}")
+        logger.warning(f"Необработанная ошибка при обращении к {exchange.id}: {e}")
     return None
 
 
