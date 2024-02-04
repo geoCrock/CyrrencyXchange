@@ -21,8 +21,6 @@ async def get_exchange_rate(currency: str):
     currency = currency.replace('-', '/').upper()
     try:
         list_values = r.lrange(currency, 0, -1)
-        # return r.get(currency).decode('utf-8')
-        # return list_values.decode('utf-8')
         return {'exchanger': list_values[0].decode('utf8'),
                 "courses":
                     [{'direction': currency, 'value': list_values[1].decode('utf-8')}]}

@@ -17,7 +17,7 @@ def get_rub():
     usd_to_rub()
 
 
-# Настройте периодическое выполнение задачи каждые 5 секунд
+# Настройка
 celery.conf.beat_schedule = {
     'run-every-5-seconds': {
         'task': 'app.tasks.get_currency_5s',
@@ -25,6 +25,6 @@ celery.conf.beat_schedule = {
     },
     'run-every-60-seconds': {
         'task': 'app.tasks.get_rub',
-        'schedule': 60.0,  # каждые 5 секунд
+        'schedule': 60.0,  # каждые 60 секунд
     },
 }
