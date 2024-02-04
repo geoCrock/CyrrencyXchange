@@ -11,9 +11,12 @@ async def fetch_ticker(exchange, pair):
         ask_price = ticker['ask']
         print(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
         if not ask_price == 'None':
-            r.set(pair, ask_price)
-            value = r.get(pair).decode('utf-8')
-            print(f'Установилось значение для редис на {pair}: {value}')
+            info_list = [exchange.id, ask_price]
+            r.delete(pair)
+            r.rpush(pair, *info_list)
+            list_values = r.lrange(pair, 0, -1)
+            print(list_values)
+            print(f'Установилось значение для редис на {pair}: {ask_price}')
             return pair
     except ccxt.NetworkError as e:
         print(f"Ошибка сети при обращении к {exchange.id}: {e}")
@@ -27,7 +30,7 @@ async def fetch_ticker(exchange, pair):
 async def get_all_cyrrency():
     # Создаем список бирж, к которым хотим подключиться
     # exchanges = (ccxt.kraken(), ccxt.bitfinex())
-    exchanges = (ccxt.kraken())
+    exchanges = (ccxt.kraken(),)
 
     # Определяем валютные пары, для которых хотим получить курсы
     currency_pairs = ('BTC/USD', 'ETH/USD', 'USDT/USD')
