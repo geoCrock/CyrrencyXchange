@@ -7,7 +7,7 @@ celery = Celery('tasks', broker='redis://localhost:6379/0')
 
 # Каждые 5с получаем актуальные курсы
 @celery.task
-def get_currency_5s():
+def get_currency():
     get_all_cyrrency()
 
 
@@ -20,7 +20,7 @@ def get_rub():
 # Настройка
 celery.conf.beat_schedule = {
     'run-every-5-seconds': {
-        'task': 'app.tasks.get_currency_5s',
+        'task': 'app.tasks.get_currency',
         'schedule': 5.0,  # каждые 5 секунд
     },
     'run-every-60-seconds': {

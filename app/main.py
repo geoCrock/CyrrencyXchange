@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-
 from currency import get_all_cyrrency
 from currency import r
 from get_rub import usd_to_rub

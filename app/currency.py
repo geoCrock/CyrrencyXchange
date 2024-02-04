@@ -1,10 +1,29 @@
+from decimal import Decimal
 import ccxt.async_support as ccxt
 import asyncio
 import redis
-
 from log import logger
 
 r = redis.Redis(host='localhost', port=6379, db=0)
+
+
+async def add_to_redis_rub(pair, exchange_id, ask_price):
+    pair = pair.replace('/USD', '/RUB')
+    rub = Decimal(r.get('rub').decode('utf-8'))
+    ask_price = Decimal(ask_price)
+    ask_price = round(ask_price * rub, 2)
+    ask_price = str(ask_price)
+    info_list = [exchange_id, ask_price]
+    r.delete(pair)
+    r.rpush(pair, *info_list)
+    logger.info(f'Установилось значение для redis на {pair}: {r.lrange(pair, 0, -1)}')
+
+
+async def add_to_redis_usd(pair, exchange_id, ask_price):
+    info_list = [exchange_id, ask_price]
+    r.delete(pair)
+    r.rpush(pair, *info_list)
+    logger.info(f'Установилось значение для redis на {pair}: {r.lrange(pair, 0, -1)}')
 
 
 async def fetch_ticker(exchange, pair):
@@ -13,11 +32,8 @@ async def fetch_ticker(exchange, pair):
         ask_price = ticker['ask']
         logger.info(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
         if not ask_price == 'None':
-            info_list = [exchange.id, ask_price]
-            r.delete(pair)
-            r.rpush(pair, *info_list)
-            list_values = r.lrange(pair, 0, -1)
-            logger.info(f'Установилось значение для redis на {pair}: {list_values}')
+            await add_to_redis_usd(pair, exchange.id, ask_price)
+            await add_to_redis_rub(pair, exchange.id, ask_price)
             return pair
     except ccxt.NetworkError as e:
         logger.warning(f"Ошибка сети при обращении к {exchange.id}: {e}")
