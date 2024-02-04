@@ -26,7 +26,8 @@ async def fetch_ticker(exchange, pair):
 
 async def get_all_cyrrency():
     # Создаем список бирж, к которым хотим подключиться
-    exchanges = (ccxt.kraken(), ccxt.bitfinex())
+    # exchanges = (ccxt.kraken(), ccxt.bitfinex())
+    exchanges = (ccxt.kraken())
 
     # Определяем валютные пары, для которых хотим получить курсы
     currency_pairs = ('BTC/USD', 'ETH/USD', 'USDT/USD')
@@ -38,8 +39,7 @@ async def get_all_cyrrency():
     tasks = []
     for pair in currency_pairs:
         for exchange in exchanges:
-            if not pair in tasks:
-                tasks.append(fetch_ticker(exchange, pair))
+            tasks.append(fetch_ticker(exchange, pair))
 
     # Запускаем все задачи и ждем их завершения
     results = await asyncio.gather(*tasks)

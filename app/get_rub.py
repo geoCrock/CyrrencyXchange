@@ -1,5 +1,5 @@
 import aiohttp
-from currency import r
+from app.currency import r
 
 
 async def usd_to_rub():
