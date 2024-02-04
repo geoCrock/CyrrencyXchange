@@ -1,6 +1,6 @@
 import aiohttp
 from app.currency import r
-from log import logger
+from app.log import logger
 
 
 async def usd_to_rub():

@@ -1,18 +1,20 @@
 import uvicorn
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
-from currency import get_all_cyrrency
+# from contextlib import asynccontextmanager
+# from currency import get_all_cyrrency
 from currency import r
 from get_rub import usd_to_rub
+from log import logger
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await usd_to_rub()
-    await get_all_cyrrency()
-    yield
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     await usd_to_rub()
+#     await get_all_cyrrency()
+#     yield
 
-app = FastAPI(lifespan=lifespan)
+# app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 @app.get("/v1/courses/{currency}")
@@ -23,18 +25,9 @@ async def get_exchange_rate(currency: str):
         return {'exchanger': list_values[0].decode('utf8'),
                 "courses":
                     [{'direction': currency, 'value': list_values[1].decode('utf-8')}]}
-    except Exception:
+    except Exception as e:
+        logger.warning(f'Произошла ошибка: {e}')
         return 'Нет данных на эту пару валют'
-
-
-@app.get('/test')
-async def test():
-    return 'hi!'
-
-
-@app.get('/test2')
-async def test():
-    return r.get('rub').decode('utf-8')
 
 
 if __name__ == "__main__":

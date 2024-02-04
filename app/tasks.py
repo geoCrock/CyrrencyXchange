@@ -4,6 +4,8 @@ from app.currency import get_all_cyrrency
 
 celery = Celery('tasks', broker='redis://localhost:6379/0')
 
+broker_connection_retry_on_startup = True
+
 
 # Каждые 5с получаем актуальные курсы
 @celery.task

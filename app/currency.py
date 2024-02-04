@@ -1,7 +1,7 @@
 from decimal import Decimal
 import ccxt.async_support as ccxt
 import redis
-from log import logger
+from app.log import logger
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -70,3 +70,5 @@ async def get_all_cyrrency():
         await exchange.close()
 
     logger.info(f'Кэш: {cached_tickers}')
+    cached_tickers = {}
+
