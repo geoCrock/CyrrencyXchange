@@ -1,11 +1,9 @@
 import logging
 import colorlog
 
-# Создаем логгер
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Создаем обработчик для вывода сообщений логгирования в консоль
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
 
@@ -23,7 +21,6 @@ formatter = colorlog.ColoredFormatter(
     }
 )
 
-# Назначаем форматтер обработчику
 console_handler.setFormatter(formatter)
 
 # Добавляем обработчик к логгеру
