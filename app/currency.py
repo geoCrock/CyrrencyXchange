@@ -1,7 +1,7 @@
 from decimal import Decimal
 import ccxt.async_support as ccxt
 import redis
-from app.log import logger
+from log import logger
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -29,7 +29,7 @@ async def fetch_ticker(exchange, pair):
     try:
         ticker = await exchange.fetch_ticker(pair)
         ask_price = ticker['ask']
-        logger.info(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
+        # logger.info(f"Курс для {pair} на {exchange.id}: Ask - {ask_price}")
         if not ask_price == 'None':
             await add_to_redis_usd(pair, exchange.id, ask_price)
             await add_to_redis_rub(pair, exchange.id, ask_price)
@@ -63,12 +63,12 @@ async def get_all_cyrrency():
                 cached_tickers[pair] = await fetch_ticker(exchange, pair)
             else:
                 # Если значение уже есть в кэше, используем его
-                logger.info(f"Значение для {pair} уже получено: {cached_tickers[pair]}")
+                # logger.info(f"Значение для {pair} уже получено: {cached_tickers[pair]}")
+                pass
 
     # Закрываем ресурсы для каждой биржи
     for exchange in exchanges:
         await exchange.close()
 
     logger.info(f'Кэш: {cached_tickers}')
-    cached_tickers = {}
 

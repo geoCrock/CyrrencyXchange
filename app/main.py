@@ -1,9 +1,26 @@
+import asyncio
 import uvicorn
 from fastapi import FastAPI
 from currency import r
+from currency import get_all_cyrrency
+from get_rub import usd_to_rub
 from log import logger
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    asyncio.create_task(async_job_function())
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+async def async_job_function():
+    while True:
+        await usd_to_rub()
+        await get_all_cyrrency()
 
 
 @app.get("/v1/courses/{currency}")
