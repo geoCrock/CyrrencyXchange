@@ -4,3 +4,4 @@ celerybeat-schedule
 tests
 .idea
 .env
+cyrrency.py

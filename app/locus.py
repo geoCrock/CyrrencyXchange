@@ -6,24 +6,24 @@ class MyUser(HttpUser):
 
     @task
     def btc_usd(self):
-        self.client.get("/courses/BTC-USD")
+        self.client.get("/v1/courses/BTC-USD")
 
     @task
     def btc_rub(self):
-        self.client.get("/courses/BTC-RUB")
+        self.client.get("/v1/courses/BTC-RUB")
 
     @task
     def eth_usd(self):
-        self.client.get("/courses/ETH-USD")
+        self.client.get("/v1/courses/ETH-USD")
 
     @task
     def eth_rub(self):
-        self.client.get("/courses/ETH-RUB")
+        self.client.get("/v1/courses/ETH-RUB")
 
     @task
     def usd_usd(self):
-        self.client.get("/courses/USDT-USD")
+        self.client.get("/v1/courses/USDT-USD")
 
     @task
     def usd_rub(self):
-        self.client.get("/courses/USDT-RUB")
+        self.client.get("/v1/courses/USDT-RUB")
