@@ -2,3 +2,5 @@
 __pycache__
 celerybeat-schedule
 tests
+.idea
+.env

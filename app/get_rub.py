@@ -12,4 +12,4 @@ async def usd_to_rub():
                 r.set('rub', str(data['rates']['RUB']))
                 logger.info(f"Получили курс рубля к доллару {str(data['rates']['RUB'])}")
     except Exception as e:
-        logger.warning(f'Произошла ошибка получения курса доллара к рублю: {e}')
+        logger.error(f'Произошла ошибка получения курса доллара к рублю: {e}')
