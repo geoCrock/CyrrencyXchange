@@ -2,11 +2,11 @@ import asyncio
 import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from log import logger
-from webs import r
-from webs import fetch_prices
-from get_rub import usd_to_rub
-from get_rub import set_usdt_usd
+from app.log import logger
+from app.webs import r
+from app.webs import fetch_prices
+from app.get_rub import usd_to_rub
+from app.get_rub import set_usdt_usd
 
 
 @asynccontextmanager

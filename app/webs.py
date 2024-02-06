@@ -2,8 +2,8 @@ import json
 from decimal import Decimal
 import websockets
 import redis
-from log import logger
-from db import SessionLocal, CurrencyTable
+from app.log import logger
+from app.db import SessionLocal, CurrencyTable
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 

@@ -1,6 +1,6 @@
 import aiohttp
-from app.currency import r
-from log import logger
+from app.webs import r
+from app.log import logger
 
 
 async def set_usdt_usd():
