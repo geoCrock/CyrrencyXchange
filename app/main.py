@@ -31,9 +31,6 @@ async def get_exchange_rate(pair: str):
         return {'exchanger': 'binance',
                 "courses":
                     [{'direction': pair, 'value': r.get(pair).decode('utf-8')}]}
-    except 'NoneType' as e:
-        logger.warning(f'Не правильная пара "{pair}" : {e}')
-        return 'Нет данных на эту пару валют'
     except Exception as e:
         logger.error(f'Произошла ошибка: {e}')
         return 'Нет данных на эту пару валют'
