@@ -1,38 +1,45 @@
-# CyrrencyXchange
+# CirrencyXchange
 
-Пары валют выглядат так: BTC-USD, ETH-RUB, USDT-RUB и т.д.
+## Description
 
-## Запуск через docker-compose
+## Peculiarities
 
-1. Создать `.env` и положить url postgres
+Available cryptocurrencies: USDT, BCT, ETH
+Currency rates available: RUB, UDF
 
-     ```env
-     POSTGRES_URL = "postgresql://postgresql:postgresql@localhost/cyrrency"
+Currency pairs look like this: “BTC-USD”, “ETH-RUB”, “USDT-RUB”, etc.
+
+## Run via docker-compose
+
+1. Create `.env` and put the postgres url
+
+      ```env
+      POSTGRES_URL = "postgresql://postgresql:postgresql@localhost/cyrrency"
+      ```
+
+2. Launch
+
+     ```bash
+     docker compose up --build
      ```
 
-2. Запустить
+## Launch
+
+1. Create `venv`
+
+2. Create `.env` and put the postgres url
+
+      ```env
+      POSTGRES_URL = "postgresql://postgresql:postgresql@localhost/cyrrency"
+      ```
+3. Install dependencies
 
     ```bash
-    docker compose up --build
+    RUN pip install --upgrade pip
+    RUN pip install -r requirements.txt
     ```
+4. Launch
 
-## Запуск
-
-1. Создать `venv`
-
-2. Создать `.env` и положить url postgres
-
-     ```env
-     POSTGRES_URL = "postgresql://postgresql:postgresql@localhost/cyrrency"
-     ```
-3. Установить зависимости
-
-   ```bash
-   RUN pip install --upgrade pip
-   RUN pip install -r requirements.txt
-   ```
-4. Запустить
-
-   ```bash
-   uvicorn app.main:app --host 127.0.0.1 --port 8000
-   ```
+    ```bash
+    uvicorn app.main:app --host 127.0.0.1 --port 8000
+    ```
