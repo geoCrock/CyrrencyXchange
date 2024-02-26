@@ -19,7 +19,7 @@ Whether you're a seasoned trader or just getting started, our WebSocket Forex Wa
 ## Peculiarities
 
 Available cryptocurrencies: USDT, BCT, ETH
-Currency rates available: RUB, UDF
+Currency rates available: RUB, USD
 
 Currency pairs look like this: “BTC-USD”, “ETH-RUB”, “USDT-RUB”, etc.
 
